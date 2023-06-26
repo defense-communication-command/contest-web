@@ -3,17 +3,7 @@ import { District } from "./District";
 
 export const COLOR_RANGE = 130;
 
-export default async function Map({ year, month }) {
-  const data = await fetch(process.env.NEXT_PUBLIC_URL + `/dust-${year}.json`);
-  const chartData = await data.json();
-  const highest = Math.max(...chartData.map((d) => d[month]));
-  const lowest = Math.min(...chartData.map((d) => d[month]));
-
-  const districtValues = chartData.reduce((acc, cur) => {
-    acc[cur.id] = cur[month];
-    return acc;
-  }, {});
-
+export default function StaticMap() {
 
   return (
     <div className="h-screen overflow-scroll">
@@ -45,12 +35,11 @@ export default async function Map({ year, month }) {
         </defs>
         <g>
           {mapData.map((d) => {
-            const density = (districtValues[d.id] - lowest) / (highest - lowest) * COLOR_RANGE;
+            const density = 0;
             return (
               <District
                 key={d.id + "_polygon"}
-                data={{ ...d, density }}
-                path={`/forecast/${d.id}/${year}`}
+                data={{ ...d, density, lightness: 30 }}
               />
             );
           })}

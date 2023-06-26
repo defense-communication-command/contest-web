@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { densityToColor } from "./Map";
 import { useRouter } from "next/navigation";
+import { COLOR_RANGE } from "./Map";
 
 export const District = ({ data, path }) => {
   const [hovered, setHovered] = useState(false);
   const router = useRouter();
+  const light = data.lightness > 0 ? data.lightness : hovered ? 30 : 50;
 
   return (
     <g style={{ cursor: "pointer" }}>
@@ -15,7 +16,7 @@ export const District = ({ data, path }) => {
           router.push(path);
         }}
         z="-1"
-        fill={densityToColor(data.density, hovered ? 30 : 50)}
+        fill={densityToColor(data.density, light)}
         stroke={"black"}
         strokeWidth="4"
         d={data.d}
@@ -28,3 +29,6 @@ export const District = ({ data, path }) => {
     </g>
   );
 };
+
+export const densityToColor = (density, lightness) =>
+  `hsl(${COLOR_RANGE - density} 50% ${lightness}%)`;
