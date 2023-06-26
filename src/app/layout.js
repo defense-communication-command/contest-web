@@ -11,7 +11,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <main className="mx-auto h-screen max-w-6xl overflow-scroll">
+          {children}
+        </main>
+      </body>
     </html>
-  )
+  );
 }
