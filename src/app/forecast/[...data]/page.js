@@ -12,7 +12,7 @@ export default async function Page({ params }) {
   const districtId = url[0];
   const district = mapData.find((data) => data.id === districtId)?.district;
   const year = url[1];
-  const chart = await fetch(process.env.NEXT_URL + `/dust-${year}.json`);
+  const chart = await fetch(process.env.NEXT_PUBLIC_URL + `/dust-${year}.json`);
   const chartData = await chart.json();
   const districtData = chartData.find((data) => data.id === districtId)
   const months = ["1월", "2월", "3월", "4월", "5월", "6월",
