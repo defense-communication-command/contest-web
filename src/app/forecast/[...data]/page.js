@@ -132,25 +132,25 @@ export default async function Page({ params }) {
               <path
                 d={d}
                 fill="none"
-                className="text-gray-300"
+                className="text-gray-400"
                 stroke="currentColor"
                 strokeWidth="2"
                 vectorEffect="non-scaling-stroke"
               />
 
               {/* Circles */}
-              {/* {districtDataArray.map((d) => (
+              {districtDataArray.map((d, i) => (
                 <path
-                  key={d.date.toString()}
-                  d={`M ${xScale(d.date)} ${yScale(d.amount)} l 0.0001 0`}
+                  key={i}
+                  d={`M ${xScale(i)} ${yScale(d)} l 0.0001 0`}
                   vectorEffect="non-scaling-stroke"
                   strokeWidth="8"
                   strokeLinecap="round"
                   fill="none"
                   stroke="currentColor"
-                  className="text-gray-400"
+                  className="text-gray-200"
                 />
-              ))} */}
+              ))}
             </svg>
           </svg>
         </div>
