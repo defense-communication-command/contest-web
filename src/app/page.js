@@ -12,11 +12,11 @@ export default function Home() {
 
   return (
     <>
-      <h1 className="absolute left-8 top-8 text-6xl font-semibold">DPM</h1>
+      <h1 className="text-6xl font-semibold py-8">서울시 월별 예상 미세먼지 농도</h1>
+      <Sidebar props={{ year, setYear, month, setMonth }} />
       <Suspense fallback={<StaticMap />}>
         <Map year={year} month={month} />
       </Suspense>
-      <Sidebar props={{ year, setYear, month, setMonth }} />
     </>
   );
 }
