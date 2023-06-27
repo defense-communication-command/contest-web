@@ -14,11 +14,25 @@ export default async function Map({ year, month }) {
     return acc;
   }, {});
 
+  // get the name of the highest and second highest districts
+  const sortedDistrictValues = Object.values(districtValues).sort((a, b) => b - a);
+  const highestDistrictId = Object.keys(districtValues).find((key) => districtValues[key] === sortedDistrictValues[0]);
+  const secondHighestDistrictId = Object.keys(districtValues).find((key) => districtValues[key] === sortedDistrictValues[1]);
+
+  const highestDistrict = mapData.find((data) => data.id === highestDistrictId)?.district;
+  const secondHighestDistrict = mapData.find((data) => data.id === secondHighestDistrictId)?.district;
+
 
   return (
-    <div className="h-screen overflow-scroll">
+    <div className="overflow-scroll relative">
+      <div className="absolute top-0 left-0 bg-white/40 mt-6 p-4 rounded-lg">
+        <h2 className="text-3xl font-semibold">서울시 {month} 예상 미세먼지 농도</h2>
+        <div className="text-lg pt-2">
+          예상 미세먼지 농도가 가장 높은 지역은 <span className="font-bold text-xl">{highestDistrict}, {secondHighestDistrict}</span>입니다.
+        </div>
+      </div>
       <svg
-        className="mx-auto my-10 h-screen max-w-4xl pl-20"
+        className="mx-auto my-4 max-w-4xl pl-20"
         viewBox="0 0 800 656"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -73,6 +87,7 @@ export default async function Map({ year, month }) {
           })}
         </g>
       </svg>
+
     </div>
   );
 }

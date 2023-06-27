@@ -16,7 +16,6 @@ export const District = ({ data, path }) => {
           router.push(path);
         }}
         z="-1"
-        fill={densityToColor(data.density, light)}
         stroke={"black"}
         strokeWidth="4"
         d={data.d}
@@ -25,7 +24,13 @@ export const District = ({ data, path }) => {
         }}
         onMouseLeave={() => {
           setHovered(false);
-        }} />
+        }}
+        style={{
+          fill: densityToColor(data.density, light),
+          transition: "fill 0.2s ease-in-out",
+        }}
+      />
+
     </g>
   );
 };

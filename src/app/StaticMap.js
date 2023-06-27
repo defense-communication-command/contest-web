@@ -6,9 +6,15 @@ export const COLOR_RANGE = 130;
 export default function StaticMap() {
 
   return (
-    <div className="h-screen overflow-scroll">
+    <div className="overflow-scroll relative">
+      <div className="absolute top-0 left-0 bg-white/40 mt-6 p-4 rounded-lg">
+        <h2 className="text-3xl font-semibold text-transparent">서울시 예상 미세먼지 농도</h2>
+        <div className="text-lg pt-2 text-transparent">
+          예상 미세먼지 농도가 가장 높은 지역은 <span className="font-bold text-xl"></span>입니다.
+        </div>
+      </div>
       <svg
-        className="mx-auto my-10 h-screen max-w-4xl pl-20"
+        className="mx-auto my-4 max-w-4xl pl-20"
         viewBox="0 0 800 656"
         xmlns="http://www.w3.org/2000/svg"
       >
