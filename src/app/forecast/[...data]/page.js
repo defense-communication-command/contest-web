@@ -22,11 +22,11 @@ export default async function Page({ params }) {
   let xScale = d3
     .scaleTime()
     .domain([0, districtDataArray.length - 1])
-    .range([0, 100]);
+    .range([5, 95]);
 
   let yScale = d3
     .scaleLinear()
-    .domain([d3.min(districtDataArray.map((d) => d)) - 1 ?? 0, d3.max(districtDataArray.map((d) => d)) + 1 ?? 0])
+    .domain([d3.min(districtDataArray.map((d) => d)) - 0.5 ?? 0, d3.max(districtDataArray.map((d) => d)) + 0.5 ?? 0])
     .range([100, 0]);
 
   let line = d3
@@ -36,11 +36,17 @@ export default async function Page({ params }) {
 
   let d = line(districtDataArray.map((d, i) => ({ date: i, amount: d })));
 
+  // get two highest valued months
+  console.log(districtDataArray);
+  const sortedDistrictDataArray = [...districtDataArray].sort((a, b) => b - a);
+  const highestMonth = districtDataArray.findIndex((i) => i === sortedDistrictDataArray[0]);
+  const secondHighestMonth = districtDataArray.findIndex((i) => i === sortedDistrictDataArray[1]);
+
+
   return (
     <>
-      <h1 className="absolute left-8 top-8 text-6xl font-semibold">{district}</h1>
+      <h1 className="absolute left-8 top-8 text-6xl font-semibold">{district} 세부 월별 예상 미세먼지 농도</h1>
       <div className="relative w-[100%] h-[50%] px-8 mt-40">
-
         <div className="@container relative h-full w-full"
           style={
             {
@@ -50,20 +56,21 @@ export default async function Page({ params }) {
               "--marginLeft": "25px",
             }
           }>
-          <svg className="absolute inset-0
-          h-[calc(100%-var(--marginTop))]
-          w-[calc(100%-var(--marginLeft)-var(--marginRight))]
-          translate-x-[var(--marginLeft)]
-          translate-y-[var(--marginTop)]
-          overflow-visible
-        ">
+          <svg
+            className="absolute inset-0
+              h-[calc(100%-var(--marginTop))]
+              w-[calc(100%-var(--marginLeft)-var(--marginRight))]
+              translate-x-[var(--marginLeft)]
+              translate-y-[var(--marginTop)]
+              overflow-visible"
+          >
             {months.map((month, i) => {
               return (
-                <g key={month} className="overflow-visible font-medium text-gray-100">
+                <g key={month} className={"overflow-visible font-medium" + ((i === highestMonth || i === secondHighestMonth) ? " text-red-500" : " text-gray-100")}>
                   <text
                     x={`${xScale(i)}%`}
                     y="100%"
-                    textAnchor={i === 0 ? "start" : i === months.length - 1 ? "end" : "middle"}
+                    textAnchor="middle"
                     fill="currentColor"
                   >
                     {month}
@@ -139,20 +146,50 @@ export default async function Page({ params }) {
               />
 
               {/* Circles */}
-              {districtDataArray.map((d, i) => (
-                <path
-                  key={i}
-                  d={`M ${xScale(i)} ${yScale(d)} l 0.0001 0`}
-                  vectorEffect="non-scaling-stroke"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  fill="none"
-                  stroke="currentColor"
-                  className="text-gray-200"
-                />
-              ))}
+              {districtDataArray.map((d, i) => {
+                return (
+                  <>
+                    {(i === highestMonth || i === secondHighestMonth) &&
+                      <>
+                        <rect
+                          x={xScale(i) - 0.15}
+                          width="0.3"
+                          height="100"
+                          fill="currentColor"
+                          className="text-yellow-500"
+                        />
+
+                      </>
+                    }
+                    {
+                      (i === secondHighestMonth) &&
+                      <rect
+                        y={yScale(d)}
+                        width="100"
+                        height="0.5"
+                        fill="currentColor"
+                        className="text-red-600/40"
+                      />
+                    }
+                    <path
+                      key={i}
+                      d={`M ${xScale(i)} ${yScale(d)} l 0.0001 0`}
+                      vectorEffect="non-scaling-stroke"
+                      strokeWidth="8"
+                      strokeLinecap="round"
+                      fill="none"
+                      stroke="currentColor"
+                      className={i === highestMonth || i === secondHighestMonth ? "text-yellow-400" : "text-gray-200"}
+                    />
+
+                  </>
+                )
+              })}
             </svg>
           </svg>
+        </div>
+        <div>
+          <p className="bg-red-300 text-red-900 p-8 text-4xl rounded-lg mt-6 text-center font-bold">{months[highestMonth]}, {months[secondHighestMonth]} 차량 2부제 적극 시행 필요</p>
         </div>
       </div>
     </>
